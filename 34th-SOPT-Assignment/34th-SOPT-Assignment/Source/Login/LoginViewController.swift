@@ -18,10 +18,11 @@ class LoginViewController: UIViewController {
     //MARK: - Property
     
     weak var emailDelegate: SendEmailProtocol?
+    var passwardRevealed = true
     
     // MARK: - UIView
     
-    private lazy var loginLabel = UILabel().then {
+    private let loginLabel = UILabel().then {
         $0.text = "TVING ID 로그인"
         $0.font = .pretendardFont(weight: 500, size: 23)
         $0.textColor = UIColor(named: "gray1")
@@ -30,7 +31,7 @@ class LoginViewController: UIViewController {
     private lazy var idTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(
             string: "아이디",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "gray2")])
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "gray2")!])
         $0.font = .pretendardFont(weight: 600, size: 15)
         $0.textColor = UIColor(named: "gray2")
         $0.backgroundColor = UIColor(named: "gray4")
@@ -38,14 +39,21 @@ class LoginViewController: UIViewController {
         $0.layer.cornerRadius = 3
         $0.delegate = self
         $0.addPadding(left: 22)
-        $0.clearButtonMode = .whileEditing
-        $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents) //.editingChanged
+        $0.tag = 100
     }
-
+    
+    private lazy var idDeleteButton = UIButton().then {
+        $0.setImage(UIImage(named: "delete_icon"), for: .normal)
+        $0.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        $0.isHidden = true
+        $0.tag = 0
+    }
+    
     private lazy var passwordTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(
             string: "비밀번호",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "gray2")])
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "gray2")!])
         $0.font = .pretendardFont(weight: 600, size: 15)
         $0.textColor = UIColor(named: "gray2")
         $0.backgroundColor = UIColor(named: "gray4")
@@ -54,7 +62,21 @@ class LoginViewController: UIViewController {
         $0.delegate = self
         $0.addPadding(left: 22)
         $0.isSecureTextEntry = true
-        $0.addTarget(self, action: #selector(textFieldDidChange), for: .allEvents)
+        $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents)
+        $0.tag = 200
+    }
+    
+    private lazy var passwordDeleteButton = UIButton().then {
+        $0.setImage(UIImage(named: "delete_icon"), for: .normal)
+        $0.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
+        $0.isHidden = true
+        $0.tag = 1
+    }
+    
+    private lazy var passwordRevealedButton = UIButton().then {
+        $0.setImage(UIImage(named: "eyeslash_icon"), for: .normal)
+        $0.addTarget(self, action: #selector(revealedButtonTapped), for: .touchUpInside)
+        $0.isHidden = true
     }
     
     private lazy var loginButton = UIButton().then {
@@ -69,7 +91,7 @@ class LoginViewController: UIViewController {
         $0.addTarget(self, action: #selector(loginButtonDidTap), for: .touchUpInside)
     }
     
-    private lazy var stackView1 = UIStackView().then {
+    private let stackView1 = UIStackView().then {
         $0.axis = .horizontal
         $0.spacing = 5
         $0.distribution = .equalSpacing
@@ -88,11 +110,11 @@ class LoginViewController: UIViewController {
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
     }
     
-    private lazy var splitView = UIView().then {
+    private let splitView = UIView().then {
         $0.backgroundColor = UIColor(named: "gray4")
     }
     
-    private lazy var noAccountLabel = UILabel().then {
+    private let noAccountLabel = UILabel().then {
         $0.text = "아직 계정이 없으신가요?"
         $0.font = .pretendardFont(weight: 600, size: 14)
         $0.textColor = UIColor(named: "gray3")
@@ -112,7 +134,7 @@ class LoginViewController: UIViewController {
         initBackground()
         initViews()
         initConstraints()
-        }
+    }
     
     // MARK: - UI
     
@@ -122,6 +144,7 @@ class LoginViewController: UIViewController {
     
     private func initViews() {
         self.view.addSubviews(loginLabel, idTextField, passwordTextField,
+                              idDeleteButton, passwordDeleteButton, passwordRevealedButton,
                               loginButton,stackView1, noAccountLabel, signUpButton)
         stackView1.addArrangedSubviews(findIdButton, splitView, findPasswordButton)
     }
@@ -143,6 +166,24 @@ class LoginViewController: UIViewController {
             make.top.equalTo(idTextField.snp.bottom).offset(7)
             make.leading.trailing.equalToSuperview().inset(20)
             make.height.equalTo(55)
+        }
+        
+        idDeleteButton.snp.makeConstraints { make in
+            make.trailing.equalTo(idTextField.snp.trailing).offset(-20)
+            make.centerY.equalTo(idTextField)
+            make.size.equalTo(20)
+        }
+        
+        passwordDeleteButton.snp.makeConstraints { make in
+            make.trailing.equalTo(passwordRevealedButton.snp.leading).offset(-10)
+            make.centerY.equalTo(passwordTextField)
+            make.size.equalTo(20)
+        }
+        
+        passwordRevealedButton.snp.makeConstraints { make in
+            make.trailing.equalTo(passwordTextField.snp.trailing).offset(-20)
+            make.centerY.equalTo(passwordTextField)
+            make.size.equalTo(20)
         }
         
         loginButton.snp.makeConstraints { make in
@@ -172,27 +213,79 @@ class LoginViewController: UIViewController {
             make.leading.equalTo(noAccountLabel.snp.trailing).offset(35)
         }
     }
+}
+
+extension LoginViewController: UITextFieldDelegate {
     
     @objc func loginButtonDidTap() {
         let VC = WelcomeViewController()
         emailDelegate?.loginDidSucceed(email: self.idTextField.text)
         self.navigationController?.pushViewController(VC, animated: true)
     }
-}
-
-extension LoginViewController: UITextFieldDelegate {
+    
+    @objc func deleteButtonTapped(_ sender: UIButton) {
+        if sender.tag == 0 {
+            idTextField.text = ""
+            idDeleteButton.isHidden = true
+        }
+        else {
+            passwordTextField.text = ""
+            passwordDeleteButton.isHidden = true
+        }
+        
+        //로그인버튼 색깔 변경 - textfield를 터치하는게 아니기에..
+        loginButton.isEnabled = false
+        loginButton.backgroundColor = .black
+        loginButton.setTitleColor(UIColor(named: "gray2"), for: .normal)
+    }
+    
+    @objc func revealedButtonTapped(_ sender: UIButton) {
+        if passwardRevealed {
+            passwordRevealedButton.setImage(UIImage(named: "eye_icon"), for: .normal)
+            passwordTextField.isSecureTextEntry = false
+        }
+        else {
+            passwordRevealedButton.setImage(UIImage(named: "eyeslash_icon"), for: .normal)
+            passwordTextField.isSecureTextEntry = true
+        }
+        passwardRevealed = !passwardRevealed
+    }
+    
     func textFieldDidBeginEditing(_ textField: UITextField) {
         textField.layer.borderColor = UIColor(named: "gray2")?.cgColor
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
         textField.layer.borderColor = UIColor(named: "gray4")?.cgColor
+        idDeleteButton.isHidden = true
+        passwordRevealedButton.isHidden = true
+        passwordDeleteButton.isHidden = true
     }
     
-    @objc func textFieldDidChange() {
-        let isTextFieldsNotEmpty = !(idTextField.text?.isEmpty ?? true)
-                                && !(passwordTextField.text?.isEmpty ?? true)
+    @objc func textFieldTapped(_ textField: UITextField) {
+        let id = idTextField.text ?? ""
+        let password = passwordTextField.text ?? ""
+        let isTextFieldsNotEmpty = !id.isEmpty && !password.isEmpty
+        
+        //로그인버튼 색깔 변경
         loginButton.isEnabled = isTextFieldsNotEmpty
         loginButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .black
+        if isTextFieldsNotEmpty {
+            loginButton.setTitleColor(.white, for: .normal)
+        } else {
+            loginButton.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        }
+        
+        //delete button
+        if textField.tag == 100 {
+            idDeleteButton.isHidden = id.isEmpty
+            passwordRevealedButton.isHidden = true
+            passwordDeleteButton.isHidden = true
+        }
+        if textField.tag == 200 {
+            idDeleteButton.isHidden = true
+            passwordDeleteButton.isHidden = password.isEmpty
+            passwordRevealedButton.isHidden = false
+        }
     }
 }
 
