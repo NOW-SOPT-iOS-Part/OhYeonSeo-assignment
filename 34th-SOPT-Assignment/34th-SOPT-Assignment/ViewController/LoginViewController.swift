@@ -9,11 +9,15 @@ import UIKit
 import SnapKit
 import Then
 
+protocol SendEmailProtocol: AnyObject {
+    func loginDidSucceed(email: String?)
+}
+
 class LoginViewController: UIViewController {
     
     //MARK: - Property
     
-    var loginButtonActive: Bool = false
+    weak var emailDelegate: SendEmailProtocol?
     
     // MARK: - UIView
     
@@ -55,7 +59,7 @@ class LoginViewController: UIViewController {
         $0.delegate = self
         $0.addPadding(left: 20)
         $0.isSecureTextEntry = true
-        $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
+        $0.addTarget(self, action: #selector(textFieldDidChange), for: .allEvents)
 
     }
     
@@ -67,6 +71,7 @@ class LoginViewController: UIViewController {
         $0.layer.cornerRadius = 3
         $0.layer.cornerRadius = 3
         $0.isEnabled = false
+        $0.addTarget(self, action: #selector(loginButtonDidTap), for: .touchUpInside)
     }
     
     private lazy var stackView1 = UIStackView().then {
@@ -101,7 +106,6 @@ class LoginViewController: UIViewController {
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         $0.titleLabel?.textColor = UIColor(named: "LightGray")
         $0.setUnderline()
-        $0.addTarget(self, action: #selector(loginButtonDidTap), for: .touchUpInside)
     }
     
     //MARK: - Lifecycles
@@ -174,12 +178,9 @@ class LoginViewController: UIViewController {
     
     @objc func loginButtonDidTap() {
         let VC = WelcomeViewController()
-//        VC.delegate = self
-//        VC.setLabelText(id: idTextField.text)
+        emailDelegate?.loginDidSucceed(email: self.idTextField.text)
         self.navigationController?.pushViewController(VC, animated: true)
     }
-    
-    
 }
 
 extension LoginViewController: UITextFieldDelegate {
@@ -195,10 +196,5 @@ extension LoginViewController: UITextFieldDelegate {
                                 && !(passwordTextField.text?.isEmpty ?? true)
         loginButton.isEnabled = isTextFieldsNotEmpty
         loginButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "SymbolColor") : .black
-        loginButtonActive = true
     }
-}
-
-#Preview{
-    LoginViewController()
 }

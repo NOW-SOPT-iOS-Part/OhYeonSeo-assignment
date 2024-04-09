@@ -9,15 +9,10 @@ import UIKit
 import SnapKit
 import Then
 
-protocol DataBindProtocol: AnyObject {
-    func dataBind(id: String?)
-}
-
 final class WelcomeViewController: UIViewController {
     
     // MARK: - Property
-    weak var idDelegate: DataBindProtocol?
-    var id: String = ""
+    var email: String? = ""
     
 //    private lazy var iconImage = UIImage().then {
 //        //$0.cgImage =
@@ -25,18 +20,29 @@ final class WelcomeViewController: UIViewController {
     
     private lazy var welcomeLabel = UILabel().then {
         $0.font = .systemFont(ofSize: 20)
+        $0.textColor = .white
     }
     
     private lazy var mainButton = UIButton().then {
         $0.backgroundColor = UIColor(named: "SymbolColor")
-        $0.titleLabel?.text = "메인으로"
+        $0.setTitle("메인으로", for: .normal)
         $0.titleLabel?.textColor = .white
+        $0.titleLabel?.font = .systemFont(ofSize: 20)
+        $0.layer.borderWidth = 1
+        $0.layer.cornerRadius = 3
+        $0.layer.cornerRadius = 3
+        $0.isEnabled = false
     }
     
     // MARK: - View
-    private func bindID() {
-        self.welcomeLabel.text = "\(id) 님 \n반가워요!"
-    }
+//    private func pushToWelcomeVC {
+//        let VC = LoginViewController()
+//        VC.idDelegate = self
+//    }
+    
+    func setLabelText(email: String?) {
+            self.email = email
+        }
     
     
     override func viewDidLoad() {
@@ -44,14 +50,34 @@ final class WelcomeViewController: UIViewController {
         self.view.backgroundColor = .black
         initViews()
         initConstraints()
+    
+        LoginViewController().emailDelegate = self
     }
     
     private func initViews() {
-        //self.view.addSubviews(iconImage, welcomeLabel, mainButton)
+        self.view.addSubviews(welcomeLabel, mainButton)
     }
     
     private func initConstraints() {
+        welcomeLabel.snp.makeConstraints { make in
+            make.top.equalToSuperview().inset(120)
+            make.centerX.equalToSuperview()
+        }
         
+        mainButton.snp.makeConstraints { make in
+            make.bottom.equalToSuperview().inset(50)
+            make.leading.trailing.equalToSuperview().inset(20)
+            make.height.equalTo(55)
+        }
     }
-    
 }
+
+extension WelcomeViewController: SendEmailProtocol {
+    func loginDidSucceed(email: String?) {
+        self.welcomeLabel.text = "\(email ?? "연서") 님 \n반가워요!"
+    }
+}
+
+//#Preview {
+//    WelcomeViewController()
+//}
