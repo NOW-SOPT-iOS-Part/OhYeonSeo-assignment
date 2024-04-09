@@ -9,15 +9,10 @@ import UIKit
 import SnapKit
 import Then
 
-protocol SendEmailProtocol: AnyObject {
-    func loginDidSucceed(email: String?)
-}
-
 class LoginViewController: UIViewController {
     
     //MARK: - Property
     
-    weak var emailDelegate: SendEmailProtocol?
     var passwardRevealed = true
     
     // MARK: - UIView
@@ -219,7 +214,7 @@ extension LoginViewController: UITextFieldDelegate {
     
     @objc func loginButtonDidTap() {
         let VC = WelcomeViewController()
-        emailDelegate?.loginDidSucceed(email: self.idTextField.text)
+        VC.setLabelText(id: idTextField.text)
         self.navigationController?.pushViewController(VC, animated: true)
     }
     
@@ -289,6 +284,6 @@ extension LoginViewController: UITextFieldDelegate {
     }
 }
 
-#Preview {
-    LoginViewController()
-}
+//#Preview {
+//    LoginViewController()
+//}

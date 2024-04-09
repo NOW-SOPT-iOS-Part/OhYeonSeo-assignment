@@ -12,13 +12,15 @@ import Then
 final class WelcomeViewController: UIViewController {
     
     // MARK: - Property
-    var email: String? = ""
+    var id: String? = ""
     
     private let logoImage = UIImageView(image: UIImage(named: "Tving_logo"))
     
     private let welcomeLabel = UILabel().then {
         $0.font = .pretendardFont(weight: 700, size: 23)
         $0.textColor = UIColor(named: "gray1")
+        $0.numberOfLines = 2
+        $0.textAlignment = .center
     }
     
     private lazy var mainButton = UIButton().then {
@@ -28,28 +30,23 @@ final class WelcomeViewController: UIViewController {
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
-        $0.layer.cornerRadius = 3
-        $0.isEnabled = false
+        $0.addTarget(self, action: #selector(mainButtontapped), for: .touchUpInside)
+    }
+    
+    //MARK: - Lifecycles
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        initBackground()
+        initViews()
+        initConstraints()
+        bindID()
     }
     
     // MARK: - View
-//    private func pushToWelcomeVC {
-//        let VC = LoginViewController()
-//        VC.idDelegate = self
-//    }
     
-    func setLabelText(email: String?) {
-            self.email = email
-        }
-    
-    
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    private func initBackground() {
         self.view.backgroundColor = .black
-        initViews()
-        initConstraints()
-    
-        LoginViewController().emailDelegate = self
+        self.navigationController?.navigationBar.isHidden = true
     }
     
     private func initViews() {
@@ -57,7 +54,6 @@ final class WelcomeViewController: UIViewController {
     }
     
     private func initConstraints() {
-        
         logoImage.snp.makeConstraints { make in
             make.top.equalToSuperview().inset(60)
             make.centerX.leading.trailing.equalToSuperview()
@@ -74,11 +70,19 @@ final class WelcomeViewController: UIViewController {
             make.height.equalTo(55)
         }
     }
-}
-
-extension WelcomeViewController: SendEmailProtocol {
-    func loginDidSucceed(email: String?) {
-        self.welcomeLabel.text = "\(email ?? "연서") 님 \n반가워요!"
+    
+    private func bindID() {
+        guard let idText = id else { return }
+        self.welcomeLabel.text = "\(idText)님 \n반가워요!"
+    }
+    
+    func setLabelText(id: String?) {
+        self.id = id
+    }
+    
+    @objc
+    func mainButtontapped() {
+        self.navigationController?.popViewController(animated: true)
     }
 }
 
