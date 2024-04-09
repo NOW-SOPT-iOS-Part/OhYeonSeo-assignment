@@ -33,7 +33,6 @@ class LoginViewController: UIViewController {
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         $0.textColor = .white
         $0.backgroundColor = UIColor(named: "gray4")
-        //$0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
         $0.delegate = self
@@ -41,14 +40,7 @@ class LoginViewController: UIViewController {
         $0.clearButtonMode = .whileEditing
         $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
-    
-    private lazy var idCancelButton = UIButton().then {
-        $0.setImage(UIImage(systemName: "xmark.circle"), for: .application)
-    }
-    
-    //eye
-    //eye.slash
-    
+
     private lazy var passwordTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "비밀번호", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         $0.textColor = .white
@@ -60,7 +52,6 @@ class LoginViewController: UIViewController {
         $0.addPadding(left: 20)
         $0.isSecureTextEntry = true
         $0.addTarget(self, action: #selector(textFieldDidChange), for: .allEvents)
-
     }
     
     private lazy var loginButton = UIButton().then {
@@ -76,7 +67,7 @@ class LoginViewController: UIViewController {
     
     private lazy var stackView1 = UIStackView().then {
         $0.axis = .horizontal
-        $0.spacing = 10
+        $0.spacing = 5
         $0.distribution = .equalSpacing
         $0.alignment = .center
     }
@@ -102,7 +93,7 @@ class LoginViewController: UIViewController {
     }
     
     private lazy var signUpButton = UIButton().then {
-        $0.setTitle("TVING ID 회원가입하기", for: .normal)
+        $0.setTitle("닉네임 만들러가기", for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 15)
         $0.titleLabel?.textColor = UIColor(named: "gray2")
         $0.setUnderline()
@@ -172,7 +163,7 @@ class LoginViewController: UIViewController {
         
         signUpButton.snp.makeConstraints { make in
             make.centerY.equalTo(noAccountLabel)
-            make.leading.equalTo(noAccountLabel.snp.trailing).offset(10)
+            make.leading.equalTo(noAccountLabel.snp.trailing).offset(25)
         }
     }
     
@@ -197,4 +188,8 @@ extension LoginViewController: UITextFieldDelegate {
         loginButton.isEnabled = isTextFieldsNotEmpty
         loginButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .black
     }
+}
+
+#Preview {
+    LoginViewController()
 }
