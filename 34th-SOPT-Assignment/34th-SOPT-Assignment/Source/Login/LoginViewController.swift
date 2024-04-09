@@ -115,11 +115,12 @@ class LoginViewController: UIViewController {
         $0.textColor = UIColor(named: "gray3")
     }
     
-    private lazy var signUpButton = UIButton().then {
+    private lazy var createNicknameButton = UIButton().then {
         $0.setTitle("닉네임 만들러가기", for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 400, size: 14)
         $0.titleLabel?.textColor = UIColor(named: "gray2")
         $0.setUnderline()
+        $0.addTarget(self, action: #selector(presentCreateNicknameVC), for: .touchUpInside)
     }
     
     //MARK: - Lifecycles
@@ -140,7 +141,7 @@ class LoginViewController: UIViewController {
     private func initViews() {
         self.view.addSubviews(loginLabel, idTextField, passwordTextField,
                               idDeleteButton, passwordDeleteButton, passwordRevealedButton,
-                              loginButton,stackView1, noAccountLabel, signUpButton)
+                              loginButton,stackView1, noAccountLabel, createNicknameButton)
         stackView1.addArrangedSubviews(findIdButton, splitView, findPasswordButton)
     }
     
@@ -203,10 +204,20 @@ class LoginViewController: UIViewController {
             make.leading.equalToSuperview().inset(50)
         }
         
-        signUpButton.snp.makeConstraints { make in
+        createNicknameButton.snp.makeConstraints { make in
             make.centerY.equalTo(noAccountLabel)
             make.leading.equalTo(noAccountLabel.snp.trailing).offset(35)
         }
+    }
+    
+    @objc private func presentCreateNicknameVC() {
+        let VC = CreateNicknameViewController()
+        if let sheet = VC.sheetPresentationController {
+            sheet.detents = [.medium()]
+           }
+
+        VC.modalPresentationStyle = .formSheet
+        self.present(VC, animated: true)
     }
 }
 
