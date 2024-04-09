@@ -23,40 +23,44 @@ class LoginViewController: UIViewController {
     
     private lazy var loginLabel = UILabel().then {
         $0.text = "TVING ID 로그인"
-        $0.font = .systemFont(ofSize: 25)
+        $0.font = .pretendardFont(weight: 500, size: 23)
         $0.textColor = UIColor(named: "gray1")
     }
     
     private lazy var idTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(
             string: "아이디",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-        $0.textColor = .white
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "gray2")])
+        $0.font = .pretendardFont(weight: 600, size: 15)
+        $0.textColor = UIColor(named: "gray2")
         $0.backgroundColor = UIColor(named: "gray4")
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
         $0.delegate = self
-        $0.addPadding(left: 20)
+        $0.addPadding(left: 22)
         $0.clearButtonMode = .whileEditing
         $0.addTarget(self, action: #selector(textFieldDidChange), for: .editingChanged)
     }
 
     private lazy var passwordTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(string: "비밀번호", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
-        $0.textColor = .white
+        $0.attributedPlaceholder = NSAttributedString(
+            string: "비밀번호",
+            attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "gray2")])
+        $0.font = .pretendardFont(weight: 600, size: 15)
+        $0.textColor = UIColor(named: "gray2")
         $0.backgroundColor = UIColor(named: "gray4")
-        $0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
         $0.delegate = self
-        $0.addPadding(left: 20)
+        $0.addPadding(left: 22)
         $0.isSecureTextEntry = true
         $0.addTarget(self, action: #selector(textFieldDidChange), for: .allEvents)
     }
     
     private lazy var loginButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
-        $0.titleLabel?.font = .systemFont(ofSize: 18)
+        $0.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
         $0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
@@ -74,12 +78,14 @@ class LoginViewController: UIViewController {
     
     private lazy var findIdButton = UIButton().then {
         $0.setTitle("아이디 찾기", for: .normal)
-        $0.titleLabel?.textColor = UIColor(named: "gray2")
+        $0.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
     }
     
     private lazy var findPasswordButton = UIButton().then {
         $0.setTitle("비밀번호 찾기", for: .normal)
-        $0.titleLabel?.textColor = UIColor(named: "gray2")
+        $0.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
     }
     
     private lazy var splitView = UIView().then {
@@ -88,13 +94,13 @@ class LoginViewController: UIViewController {
     
     private lazy var noAccountLabel = UILabel().then {
         $0.text = "아직 계정이 없으신가요?"
-        $0.font = .systemFont(ofSize: 15)
+        $0.font = .pretendardFont(weight: 600, size: 14)
         $0.textColor = UIColor(named: "gray3")
     }
     
     private lazy var signUpButton = UIButton().then {
         $0.setTitle("닉네임 만들러가기", for: .normal)
-        $0.titleLabel?.font = UIFont.systemFont(ofSize: 15)
+        $0.titleLabel?.font = .pretendardFont(weight: 400, size: 14)
         $0.titleLabel?.textColor = UIColor(named: "gray2")
         $0.setUnderline()
     }
@@ -147,7 +153,7 @@ class LoginViewController: UIViewController {
         
         stackView1.snp.makeConstraints { make in
             make.top.equalTo(loginButton.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(60)
+            make.leading.trailing.equalToSuperview().inset(80)
             make.height.equalTo(55)
         }
         
@@ -157,13 +163,13 @@ class LoginViewController: UIViewController {
         }
         
         noAccountLabel.snp.makeConstraints { make in
-            make.top.equalTo(findIdButton.snp.bottom).offset(20)
-            make.leading.equalToSuperview().inset(40)
+            make.top.equalTo(findIdButton.snp.bottom).offset(25)
+            make.leading.equalToSuperview().inset(50)
         }
         
         signUpButton.snp.makeConstraints { make in
             make.centerY.equalTo(noAccountLabel)
-            make.leading.equalTo(noAccountLabel.snp.trailing).offset(25)
+            make.leading.equalTo(noAccountLabel.snp.trailing).offset(35)
         }
     }
     
