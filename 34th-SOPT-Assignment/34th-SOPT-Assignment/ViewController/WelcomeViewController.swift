@@ -24,7 +24,7 @@ final class WelcomeViewController: UIViewController {
     }
     
     private lazy var mainButton = UIButton().then {
-        $0.backgroundColor = UIColor(named: "SymbolColor")
+        $0.backgroundColor = UIColor(named: "BrandColor")
         $0.setTitle("메인으로", for: .normal)
         $0.titleLabel?.textColor = .white
         $0.titleLabel?.font = .systemFont(ofSize: 20)

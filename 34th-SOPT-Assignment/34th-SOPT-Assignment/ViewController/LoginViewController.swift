@@ -24,7 +24,7 @@ class LoginViewController: UIViewController {
     private lazy var loginLabel = UILabel().then {
         $0.text = "TVING ID 로그인"
         $0.font = .systemFont(ofSize: 25)
-        $0.textColor = .white
+        $0.textColor = UIColor(named: "gray1")
     }
     
     private lazy var idTextField = UITextField().then {
@@ -32,8 +32,8 @@ class LoginViewController: UIViewController {
             string: "아이디",
             attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         $0.textColor = .white
-        $0.backgroundColor = UIColor(named: "MainGray")
-        $0.layer.borderColor = UIColor(named: "MainGray")?.cgColor
+        $0.backgroundColor = UIColor(named: "gray4")
+        //$0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
         $0.delegate = self
@@ -52,8 +52,8 @@ class LoginViewController: UIViewController {
     private lazy var passwordTextField = UITextField().then {
         $0.attributedPlaceholder = NSAttributedString(string: "비밀번호", attributes: [NSAttributedString.Key.foregroundColor: UIColor.white])
         $0.textColor = .white
-        $0.backgroundColor = UIColor(named: "MainGray")
-        $0.layer.borderColor = UIColor(named: "MainGray")?.cgColor
+        $0.backgroundColor = UIColor(named: "gray4")
+        $0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
         $0.delegate = self
@@ -66,7 +66,7 @@ class LoginViewController: UIViewController {
     private lazy var loginButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
         $0.titleLabel?.font = .systemFont(ofSize: 18)
-        $0.layer.borderColor = UIColor(named: "MainGray")?.cgColor
+        $0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
         $0.layer.cornerRadius = 3
@@ -83,28 +83,28 @@ class LoginViewController: UIViewController {
     
     private lazy var findIdButton = UIButton().then {
         $0.setTitle("아이디 찾기", for: .normal)
-        $0.titleLabel?.textColor = UIColor(named: "LightGray")
+        $0.titleLabel?.textColor = UIColor(named: "gray2")
     }
     
     private lazy var findPasswordButton = UIButton().then {
         $0.setTitle("비밀번호 찾기", for: .normal)
-        $0.titleLabel?.textColor = UIColor(named: "LightGray")
+        $0.titleLabel?.textColor = UIColor(named: "gray2")
     }
     
     private lazy var splitView = UIView().then {
-        $0.backgroundColor = UIColor(named: "LightGray")
+        $0.backgroundColor = UIColor(named: "gray4")
     }
     
     private lazy var noAccountLabel = UILabel().then {
         $0.text = "아직 계정이 없으신가요?"
         $0.font = .systemFont(ofSize: 15)
-        $0.textColor = UIColor(named: "ActiveGray")
+        $0.textColor = UIColor(named: "gray3")
     }
     
     private lazy var signUpButton = UIButton().then {
         $0.setTitle("TVING ID 회원가입하기", for: .normal)
         $0.titleLabel?.font = UIFont.systemFont(ofSize: 15)
-        $0.titleLabel?.textColor = UIColor(named: "LightGray")
+        $0.titleLabel?.textColor = UIColor(named: "gray2")
         $0.setUnderline()
     }
     
@@ -185,16 +185,16 @@ class LoginViewController: UIViewController {
 
 extension LoginViewController: UITextFieldDelegate {
     func textFieldDidBeginEditing(_ textField: UITextField) {
-        textField.layer.borderColor = UIColor(named: "LightGray")?.cgColor
+        textField.layer.borderColor = UIColor(named: "gray2")?.cgColor
     }
     func textFieldDidEndEditing(_ textField: UITextField) {
-        textField.layer.borderColor = UIColor(named: "MainGray")?.cgColor
+        textField.layer.borderColor = UIColor(named: "gray4")?.cgColor
     }
     
     @objc func textFieldDidChange() {
         let isTextFieldsNotEmpty = !(idTextField.text?.isEmpty ?? true)
                                 && !(passwordTextField.text?.isEmpty ?? true)
         loginButton.isEnabled = isTextFieldsNotEmpty
-        loginButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "SymbolColor") : .black
+        loginButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .black
     }
 }
