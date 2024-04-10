@@ -19,15 +19,9 @@ class CreateNicknameViewController: UIViewController {
     }
     
     private lazy var nicknameTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(
-            string: "닉네임",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor.black])
-        $0.font = .pretendardFont(weight: 600, size: 15)
-        $0.backgroundColor = UIColor(named: "gray2")
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 3
+        $0.setTextField(textColor: UIColor.black, backgroundColor: UIColor(named: "gray2")!)
+        $0.setPlaceholder(placeholder: "닉네임", fontColor: UIColor.black, font: .pretendardFont(weight: 600, size: 15))
         $0.layer.borderColor = UIColor(named: "gray2")?.cgColor
-        $0.addPadding(left: 22)
     }
     
     private lazy var saveButton = UIButton().then {

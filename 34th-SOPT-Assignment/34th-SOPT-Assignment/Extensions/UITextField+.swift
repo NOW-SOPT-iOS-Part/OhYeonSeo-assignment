@@ -22,7 +22,23 @@ extension UITextField {
             rightViewMode = .always
         }
     }
+    
+    //TextField 기본 속성 커스텀
+    func setTextField(textColor: UIColor, backgroundColor: UIColor) {
+        self.textColor = textColor
+        self.backgroundColor = backgroundColor
+        self.clipsToBounds = true
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 5
+    }
+    
+    
+    //TextField placeholder 커스텀
+    func setPlaceholder(placeholder: String, fontColor: UIColor?, font: UIFont) {
+        self.attributedPlaceholder = NSAttributedString(string: placeholder,
+                                                        attributes: [.foregroundColor: fontColor!,
+                                                                     .font: font])
+        self.addPadding(left: 22)
+
+    }
 }
-
-
-//ex . myTextField.addPadding(left: 12, right: 44)

@@ -24,16 +24,9 @@ class LoginViewController: UIViewController {
     }
     
     private lazy var idTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(
-            string: "아이디",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "gray2")!])
-        $0.font = .pretendardFont(weight: 600, size: 15)
-        $0.textColor = UIColor(named: "gray2")
-        $0.backgroundColor = UIColor(named: "gray4")
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 3
+        $0.setTextField(textColor: UIColor(named: "gray2")!, backgroundColor: UIColor(named: "gray4")!)
+        $0.setPlaceholder(placeholder: "아이디", fontColor: UIColor(named: "gray2")!, font: .pretendardFont(weight: 600, size: 15))
         $0.delegate = self
-        $0.addPadding(left: 22)
         $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents) //.editingChanged
         $0.tag = 100
     }
@@ -46,16 +39,9 @@ class LoginViewController: UIViewController {
     }
     
     private lazy var passwordTextField = UITextField().then {
-        $0.attributedPlaceholder = NSAttributedString(
-            string: "비밀번호",
-            attributes: [NSAttributedString.Key.foregroundColor: UIColor(named: "gray2")!])
-        $0.font = .pretendardFont(weight: 600, size: 15)
-        $0.textColor = UIColor(named: "gray2")
-        $0.backgroundColor = UIColor(named: "gray4")
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 3
+        $0.setTextField(textColor: UIColor(named: "gray2")!, backgroundColor: UIColor(named: "gray4")!)
+        $0.setPlaceholder(placeholder: "비밀번호", fontColor: UIColor(named: "gray2")!, font: .pretendardFont(weight: 600, size: 15))
         $0.delegate = self
-        $0.addPadding(left: 22)
         $0.isSecureTextEntry = true
         $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents)
         $0.tag = 200
@@ -295,6 +281,6 @@ extension LoginViewController: UITextFieldDelegate {
     }
 }
 
-//#Preview {
-//    LoginViewController()
-//}
+#Preview {
+    LoginViewController()
+}
