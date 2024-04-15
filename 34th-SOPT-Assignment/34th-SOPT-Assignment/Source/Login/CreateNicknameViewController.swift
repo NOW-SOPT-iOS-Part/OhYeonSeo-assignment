@@ -89,7 +89,7 @@ class CreateNicknameViewController: UIViewController {
         //저장버튼 색깔 변경
         saveButton.isEnabled = isTextFieldsNotEmpty
         saveButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .white
-        saveButton.layer.borderColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .white
+        saveButton.layer.borderColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor")?.cgColor : UIColor.white.cgColor
 
         if isTextFieldsNotEmpty {
             saveButton.setTitleColor(.white, for: .normal)
