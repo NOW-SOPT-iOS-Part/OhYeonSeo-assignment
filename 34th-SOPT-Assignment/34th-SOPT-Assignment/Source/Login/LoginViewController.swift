@@ -14,6 +14,7 @@ class LoginViewController: UIViewController {
     //MARK: - Property
     
     var passwardRevealed = true
+    var nickname: String? = ""
     
     // MARK: - UIView
     
@@ -196,22 +197,31 @@ class LoginViewController: UIViewController {
         }
     }
     
+    
     @objc private func presentCreateNicknameVC() {
         let VC = CreateNicknameViewController()
         if let sheet = VC.sheetPresentationController {
             sheet.detents = [.medium()]
            }
-
         VC.modalPresentationStyle = .formSheet
+        VC.delegate = self
         self.present(VC, animated: true)
     }
 }
 
+extension LoginViewController: SendNicknameData {
+    func sendNicknameData(nickname: String) {
+        self.nickname = nickname
+    }
+}
+
 extension LoginViewController: UITextFieldDelegate {
-    
+    //id or nickname 전달
     @objc func loginButtonDidTap() {
         let VC = WelcomeViewController()
-        VC.setLabelText(id: idTextField.text)
+        let id = (nickname == "") ? idTextField.text : nickname
+       
+        VC.setLabelText(id: id)
         self.navigationController?.pushViewController(VC, animated: true)
     }
     
@@ -281,6 +291,6 @@ extension LoginViewController: UITextFieldDelegate {
     }
 }
 
-#Preview {
-    LoginViewController()
-}
+//#Preview {
+//    LoginViewController()
+//}

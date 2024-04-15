@@ -9,6 +9,10 @@ import UIKit
 import SnapKit
 import Then
 
+protocol SendNicknameData: AnyObject{
+    func sendNicknameData(nickname: String)
+}
+
 class CreateNicknameViewController: UIViewController {
     
     // MARK: - Property
@@ -34,6 +38,8 @@ class CreateNicknameViewController: UIViewController {
         $0.layer.borderColor = UIColor(named: "BrandColor")?.cgColor
         $0.addTarget(self, action: #selector(backToLoginVC), for: .touchUpInside)
     }
+    
+    weak var delegate: SendNicknameData?
     
     //MARK: - Lifecycles
     override func viewDidLoad() {
@@ -73,6 +79,8 @@ class CreateNicknameViewController: UIViewController {
     }
     
     @objc private func backToLoginVC() {
-        //FIX - 닉네임 전달 로직
+        guard let nicknameText = nicknameTextField.text else { return }
+        delegate?.sendNicknameData(nickname: nicknameText)
+        dismiss(animated: true)
     }
 }
