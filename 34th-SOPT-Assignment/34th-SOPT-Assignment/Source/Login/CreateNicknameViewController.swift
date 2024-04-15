@@ -15,6 +15,8 @@ protocol SendNicknameData: AnyObject{
 
 class CreateNicknameViewController: UIViewController {
     
+    let nickRegEx = "[가-힣]{1,10}"
+    
     // MARK: - Property
 
     private let nicknameLable = UILabel().then {
@@ -25,18 +27,20 @@ class CreateNicknameViewController: UIViewController {
     private lazy var nicknameTextField = UITextField().then {
         $0.setTextField(textColor: UIColor.black, backgroundColor: UIColor(named: "gray2")!)
         $0.setPlaceholder(placeholder: "닉네임", fontColor: UIColor.black, font: .pretendardFont(weight: 600, size: 15))
+        $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents)
         $0.layer.borderColor = UIColor(named: "gray2")?.cgColor
     }
     
     private lazy var saveButton = UIButton().then {
-        $0.backgroundColor = UIColor(named: "BrandColor")
+        $0.backgroundColor = .white
         $0.setTitle("저장하기", for: .normal)
-        $0.titleLabel?.textColor = .white
+        $0.setTitleColor(UIColor(named: "gray2"), for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
-        $0.layer.borderColor = UIColor(named: "BrandColor")?.cgColor
+        $0.layer.borderColor = UIColor(named: "gray2")?.cgColor
         $0.addTarget(self, action: #selector(backToLoginVC), for: .touchUpInside)
+        $0.isEnabled = false
     }
     
     weak var delegate: SendNicknameData?
@@ -78,9 +82,29 @@ class CreateNicknameViewController: UIViewController {
         }
     }
     
+    @objc func textFieldTapped(_ textField: UITextField) {
+        let nickname = nicknameTextField.text ?? ""
+        let isTextFieldsNotEmpty = !nickname.isEmpty && checkNickname(str: nickname)
+        
+        //저장버튼 색깔 변경
+        saveButton.isEnabled = isTextFieldsNotEmpty
+        saveButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .white
+        saveButton.layer.borderColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .white
+
+        if isTextFieldsNotEmpty {
+            saveButton.setTitleColor(.white, for: .normal)
+        } else {
+            saveButton.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        }
+    }
+    
     @objc private func backToLoginVC() {
         guard let nicknameText = nicknameTextField.text else { return }
         delegate?.sendNicknameData(nickname: nicknameText)
         dismiss(animated: true)
+    }
+    
+    func checkNickname(str: String) -> Bool {
+        return NSPredicate(format: "SELF MATCHES %@", nickRegEx).evaluate(with: str)
     }
 }

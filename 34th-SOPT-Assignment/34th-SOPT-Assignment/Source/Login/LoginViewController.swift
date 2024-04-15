@@ -15,6 +15,7 @@ class LoginViewController: UIViewController {
     
     var passwardRevealed = true
     var nickname: String? = ""
+    let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
     
     // MARK: - UIView
     
@@ -207,6 +208,10 @@ class LoginViewController: UIViewController {
         VC.delegate = self
         self.present(VC, animated: true)
     }
+    
+    func checkEmail(str: String) -> Bool {
+        return  NSPredicate(format: "SELF MATCHES %@", emailRegEx).evaluate(with: str)
+    }
 }
 
 extension LoginViewController: SendNicknameData {
@@ -266,7 +271,7 @@ extension LoginViewController: UITextFieldDelegate {
     @objc func textFieldTapped(_ textField: UITextField) {
         let id = idTextField.text ?? ""
         let password = passwordTextField.text ?? ""
-        let isTextFieldsNotEmpty = !id.isEmpty && !password.isEmpty
+        let isTextFieldsNotEmpty = !id.isEmpty && !password.isEmpty && checkEmail(str: id)
         
         //로그인버튼 색깔 변경
         loginButton.isEnabled = isTextFieldsNotEmpty
