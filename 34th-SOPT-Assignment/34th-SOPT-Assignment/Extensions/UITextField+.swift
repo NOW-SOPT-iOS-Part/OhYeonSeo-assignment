@@ -24,7 +24,7 @@ extension UITextField {
     }
     
     //TextField 기본 속성 커스텀
-    func setTextField(textColor: UIColor, backgroundColor: UIColor) {
+    func setTextField(textColor: UIColor?, backgroundColor: UIColor?) {
         self.textColor = textColor
         self.backgroundColor = backgroundColor
         self.clipsToBounds = true

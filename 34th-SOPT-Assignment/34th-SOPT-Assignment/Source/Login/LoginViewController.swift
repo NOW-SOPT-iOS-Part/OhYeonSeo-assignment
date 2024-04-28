@@ -22,27 +22,27 @@ class LoginViewController: UIViewController {
     private let loginLabel = UILabel().then {
         $0.text = "TVING ID 로그인"
         $0.font = .pretendardFont(weight: 500, size: 23)
-        $0.textColor = UIColor(named: "gray1")
+        $0.textColor = .gray1
     }
     
     private lazy var idTextField = UITextField().then {
-        $0.setTextField(textColor: UIColor(named: "gray2")!, backgroundColor: UIColor(named: "gray4")!)
-        $0.setPlaceholder(placeholder: "아이디", fontColor: UIColor(named: "gray2")!, font: .pretendardFont(weight: 600, size: 15))
+        $0.setTextField(textColor: .gray2, backgroundColor: .gray4)
+        $0.setPlaceholder(placeholder: "아이디", fontColor: .gray2, font: .pretendardFont(weight: 600, size: 15))
         $0.delegate = self
         $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents) //.editingChanged
         $0.tag = 100
     }
     
     private lazy var idDeleteButton = UIButton().then {
-        $0.setImage(UIImage(named: "delete_icon"), for: .normal)
+        $0.setImage(.deleteIcon, for: .normal)
         $0.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         $0.isHidden = true
         $0.tag = 0
     }
     
     private lazy var passwordTextField = UITextField().then {
-        $0.setTextField(textColor: UIColor(named: "gray2")!, backgroundColor: UIColor(named: "gray4")!)
-        $0.setPlaceholder(placeholder: "비밀번호", fontColor: UIColor(named: "gray2")!, font: .pretendardFont(weight: 600, size: 15))
+        $0.setTextField(textColor: .gray2, backgroundColor: .gray4)
+        $0.setPlaceholder(placeholder: "비밀번호", fontColor: .gray2, font: .pretendardFont(weight: 600, size: 15))
         $0.delegate = self
         $0.isSecureTextEntry = true
         $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents)
@@ -50,21 +50,21 @@ class LoginViewController: UIViewController {
     }
     
     private lazy var passwordDeleteButton = UIButton().then {
-        $0.setImage(UIImage(named: "delete_icon"), for: .normal)
+        $0.setImage(.deleteIcon, for: .normal)
         $0.addTarget(self, action: #selector(deleteButtonTapped), for: .touchUpInside)
         $0.isHidden = true
         $0.tag = 1
     }
     
     private lazy var passwordRevealedButton = UIButton().then {
-        $0.setImage(UIImage(named: "eyeslash_icon"), for: .normal)
+        $0.setImage(.eyeslashIcon, for: .normal)
         $0.addTarget(self, action: #selector(revealedButtonTapped), for: .touchUpInside)
         $0.isHidden = true
     }
     
     private lazy var loginButton = UIButton().then {
         $0.setTitle("로그인하기", for: .normal)
-        $0.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        $0.setTitleColor(.gray2, for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
         $0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.borderWidth = 1
@@ -83,30 +83,30 @@ class LoginViewController: UIViewController {
     
     private lazy var findIdButton = UIButton().then {
         $0.setTitle("아이디 찾기", for: .normal)
-        $0.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        $0.setTitleColor(.gray2, for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
     }
     
     private lazy var findPasswordButton = UIButton().then {
         $0.setTitle("비밀번호 찾기", for: .normal)
-        $0.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        $0.setTitleColor(.gray2, for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
     }
     
     private let splitView = UIView().then {
-        $0.backgroundColor = UIColor(named: "gray4")
+        $0.backgroundColor = .gray4
     }
     
     private let noAccountLabel = UILabel().then {
         $0.text = "아직 계정이 없으신가요?"
         $0.font = .pretendardFont(weight: 600, size: 14)
-        $0.textColor = UIColor(named: "gray3")
+        $0.textColor = .gray3
     }
     
     private lazy var createNicknameButton = UIButton().then {
         $0.setTitle("닉네임 만들러가기", for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 400, size: 14)
-        $0.titleLabel?.textColor = UIColor(named: "gray2")
+        $0.titleLabel?.textColor = .gray3
         $0.setUnderline()
         $0.addTarget(self, action: #selector(presentCreateNicknameVC), for: .touchUpInside)
     }
@@ -243,16 +243,16 @@ extension LoginViewController: UITextFieldDelegate {
         //로그인버튼 색깔 변경 - textfield를 터치하는게 아니기에..
         loginButton.isEnabled = false
         loginButton.backgroundColor = .black
-        loginButton.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        loginButton.setTitleColor(.gray3, for: .normal)
     }
     
     @objc func revealedButtonTapped(_ sender: UIButton) {
         if passwardRevealed {
-            passwordRevealedButton.setImage(UIImage(named: "eye_icon"), for: .normal)
+            passwordRevealedButton.setImage(.eyeIcon, for: .normal)
             passwordTextField.isSecureTextEntry = false
         }
         else {
-            passwordRevealedButton.setImage(UIImage(named: "eyeslash_icon"), for: .normal)
+            passwordRevealedButton.setImage(.eyeslashIcon, for: .normal)
             passwordTextField.isSecureTextEntry = true
         }
         passwardRevealed = !passwardRevealed
@@ -279,7 +279,7 @@ extension LoginViewController: UITextFieldDelegate {
         if isTextFieldsNotEmpty {
             loginButton.setTitleColor(.white, for: .normal)
         } else {
-            loginButton.setTitleColor(UIColor(named: "gray2"), for: .normal)
+            loginButton.setTitleColor(.gray2, for: .normal)
         }
         
         //delete button

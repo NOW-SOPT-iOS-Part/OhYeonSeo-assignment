@@ -25,7 +25,7 @@ class CreateNicknameViewController: UIViewController {
     }
     
     private lazy var nicknameTextField = UITextField().then {
-        $0.setTextField(textColor: UIColor.black, backgroundColor: UIColor(named: "gray2")!)
+        $0.setTextField(textColor: .black, backgroundColor:.gray2)
         $0.setPlaceholder(placeholder: "닉네임", fontColor: UIColor.black, font: .pretendardFont(weight: 600, size: 15))
         $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents)
         $0.layer.borderColor = UIColor(named: "gray2")?.cgColor
@@ -34,7 +34,7 @@ class CreateNicknameViewController: UIViewController {
     private lazy var saveButton = UIButton().then {
         $0.backgroundColor = .white
         $0.setTitle("저장하기", for: .normal)
-        $0.setTitleColor(UIColor(named: "gray2"), for: .normal)
+        $0.setTitleColor(.gray2, for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
@@ -94,7 +94,7 @@ class CreateNicknameViewController: UIViewController {
         if isTextFieldsNotEmpty {
             saveButton.setTitleColor(.white, for: .normal)
         } else {
-            saveButton.setTitleColor(UIColor(named: "gray2"), for: .normal)
+            saveButton.setTitleColor(.gray2, for: .normal)
         }
     }
     
