@@ -13,6 +13,7 @@ final class HomeViewController: UIViewController {
     
     // MARK: - Property
     
+    private let homeTopView = HomeTopView()
     
     //MARK: - Lifecycles
     override func viewDidLoad() {
@@ -29,11 +30,18 @@ final class HomeViewController: UIViewController {
     }
     
     private func initViews() {
-        self.view.addSubviews()
+        self.view.addSubviews(homeTopView)
     }
     
     private func initConstraints() {
-
+        homeTopView.snp.makeConstraints{
+            $0.top.equalToSuperview()
+            $0.leading.trailing.equalToSuperview()
+            $0.height.equalTo(10)
+        }
     }
+}
 
+#Preview {
+    HomeViewController()
 }

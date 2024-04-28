@@ -82,7 +82,7 @@ final class WelcomeViewController: UIViewController {
     
     @objc
     func mainButtontapped() {
-        let viewController = MainViewController()
+        let viewController = HomeViewController()
         self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
