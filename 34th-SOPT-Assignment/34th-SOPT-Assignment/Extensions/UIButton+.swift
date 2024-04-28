@@ -17,4 +17,13 @@ extension UIButton {
         )
         setAttributedTitle(attributedString, for: .normal)
     }
+    
+    //UIButton 기본 속성 커스텀
+    func setButtonLayer(borderColor: UIColor?) {
+        self.clipsToBounds = true
+        self.layer.borderWidth = 1
+        self.layer.cornerRadius = 3
+        self.layer.borderColor = borderColor?.cgColor
+    }
+    
 }

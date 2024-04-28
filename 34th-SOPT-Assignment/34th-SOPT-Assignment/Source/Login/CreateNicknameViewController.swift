@@ -36,9 +36,7 @@ class CreateNicknameViewController: UIViewController {
         $0.setTitle("저장하기", for: .normal)
         $0.setTitleColor(.gray2, for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 3
-        $0.layer.borderColor = UIColor(named: "gray2")?.cgColor
+        $0.setButtonLayer(borderColor: .gray2)
         $0.addTarget(self, action: #selector(backToLoginVC), for: .touchUpInside)
         $0.isEnabled = false
     }
@@ -89,7 +87,7 @@ class CreateNicknameViewController: UIViewController {
         //저장버튼 색깔 변경
         saveButton.isEnabled = isTextFieldsNotEmpty
         saveButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .white
-        saveButton.layer.borderColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor")?.cgColor : UIColor(named: "gray2")?.cgColor
+        saveButton.setButtonLayer(borderColor: isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .gray2)
 
         if isTextFieldsNotEmpty {
             saveButton.setTitleColor(.white, for: .normal)

@@ -66,9 +66,7 @@ class LoginViewController: UIViewController {
         $0.setTitle("로그인하기", for: .normal)
         $0.setTitleColor(.gray2, for: .normal)
         $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
-        $0.layer.borderColor = UIColor(named: "gray4")?.cgColor
-        $0.layer.borderWidth = 1
-        $0.layer.cornerRadius = 3
+        $0.setButtonLayer(borderColor: .gray4)
         $0.isEnabled = false
         $0.addTarget(self, action: #selector(loginButtonDidTap), for: .touchUpInside)
     }
@@ -222,11 +220,11 @@ extension LoginViewController: SendNicknameData {
 extension LoginViewController: UITextFieldDelegate {
     //id or nickname 전달
     @objc func loginButtonDidTap() {
-        let VC = WelcomeViewController()
+        let viewController = WelcomeViewController()
         let id = (nickname == "") ? idTextField.text : nickname
        
-        VC.setLabelText(id: id)
-        self.navigationController?.pushViewController(VC, animated: true)
+        viewController.setLabelText(id: id)
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
     
     @objc func deleteButtonTapped(_ sender: UIButton) {
