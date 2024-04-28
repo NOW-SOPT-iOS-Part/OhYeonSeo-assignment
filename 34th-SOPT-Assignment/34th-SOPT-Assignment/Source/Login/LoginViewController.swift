@@ -69,7 +69,6 @@ class LoginViewController: UIViewController {
         $0.layer.borderColor = UIColor(named: "gray4")?.cgColor
         $0.layer.borderWidth = 1
         $0.layer.cornerRadius = 3
-        $0.layer.cornerRadius = 3
         $0.isEnabled = false
         $0.addTarget(self, action: #selector(loginButtonDidTap), for: .touchUpInside)
     }
