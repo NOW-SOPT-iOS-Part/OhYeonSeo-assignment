@@ -82,7 +82,8 @@ final class WelcomeViewController: UIViewController {
     
     @objc
     func mainButtontapped() {
-        self.navigationController?.popViewController(animated: true)
+        let viewController = MainViewController()
+        self.navigationController?.pushViewController(viewController, animated: true)
     }
 }
 
