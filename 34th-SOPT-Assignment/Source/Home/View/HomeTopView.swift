@@ -66,8 +66,8 @@ final class HomeTopView: UIView {
         }
         
         topStackView.snp.makeConstraints{
-            $0.top.equalTo(safeAreaLayoutGuide)
-            $0.leading.trailing.equalToSuperview()
+            $0.top.equalToSuperview()
+            $0.horizontalEdges.equalToSuperview().inset(15)
         }
     }
     
