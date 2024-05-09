@@ -27,6 +27,12 @@ class SubViewCell1: UICollectionViewCell {
         $0.textColor = .gray1
     }
     
+    private let audiAcc = UILabel().then {
+        $0.text = "n명"
+        $0.font = .pretendardFont(weight: 300, size: 8)
+        $0.textColor = .gray1
+    }
+    
     // MARK: - Life Cycles
     
     override init(frame: CGRect) {
@@ -40,7 +46,7 @@ class SubViewCell1: UICollectionViewCell {
     }
     
     private func initViews() {
-        addSubviews(moviePoster, movieName)
+        addSubviews(moviePoster, movieName, audiAcc)
     }
     
     private func initConstraints() {
@@ -52,14 +58,19 @@ class SubViewCell1: UICollectionViewCell {
             $0.top.equalTo(moviePoster.snp.bottom).offset(3)
             $0.leading.equalTo(moviePoster.snp.leading).inset(10)
         }
+        
+        audiAcc.snp.makeConstraints {
+            $0.top.equalTo(movieName.snp.bottom).offset(3)
+            $0.leading.equalTo(moviePoster.snp.leading).inset(10)
+        }
     }
 }
 
 extension SubViewCell1 {
-    func dataBind(_ mainData: MainModel, itemRow: Int) {
-        moviePoster.image = mainData.itemImg
-        movieName.text = mainData.title
-        self.itemRow = itemRow
+    func bind(movieImage: UIImage, movieName: String, audiAcc: String) {
+        self.moviePoster.image = movieImage
+        self.movieName.text = movieName
+        self.audiAcc.text = "관객 " + audiAcc + "명"
     }
 }
 

@@ -19,6 +19,8 @@ final class HomeViewController: UIViewController {
         }
     }
     
+    private var movieData: [DailyBoxOfficeList] = []
+    
     private var liveData = LiveModel.dummy() {
         didSet {
             self.popularLiveCollectionView.reloadData()
@@ -30,7 +32,7 @@ final class HomeViewController: UIViewController {
             self.advBannerCollectionView.reloadData()
         }
     }
-    
+        
     // MARK: - View
     
     private let scrollView = UIScrollView()
@@ -58,6 +60,7 @@ final class HomeViewController: UIViewController {
         setDelegate()
         setRegister()
         setCollectionView()
+        fetchData()
     }
     
     // MARK: - init functions
@@ -171,7 +174,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         if collectionView == mainContentCollectionView{
             return 4
         } else if collectionView == mustSeenCollectionView {
-            return mainData.count
+            return movieData.count
         } else if collectionView == popularLiveCollectionView {
             return liveData.count
         } else {
@@ -190,7 +193,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         else if collectionView == mustSeenCollectionView {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sub1", for: indexPath) as? SubViewCell1
             else { return UICollectionViewCell() }
-            cell.dataBind(mainData[indexPath.item], itemRow: indexPath.item)
+            cell.bind(movieImage: .movie1, movieName: String(movieData[indexPath.row].movieNm.prefix(9)), audiAcc: movieData[indexPath.row].audiAcc)
             return cell
         }
         else if collectionView == popularLiveCollectionView {
@@ -236,3 +239,26 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         return CGSize(width: 50, height: 50)
     }
 }
+
+extension HomeViewController {
+     private func fetchData() {
+         MovieService.shared.fetchMovieChart(date: "20240505") { [weak self] response in
+             switch response {
+             case.success(let data):
+                 guard let data = data as? MovieResponseModel else { return }
+                 self?.movieData.append(contentsOf: data.boxOfficeResult.dailyBoxOfficeList)
+                 self?.mustSeenCollectionView.reloadData()
+             case .requestErr:
+                 print("요청 오류 입니다")
+             case .decodedErr:
+                 print("디코딩 오류 입니다")
+             case .pathErr:
+                 print("경로 오류 입니다")
+             case .serverErr:
+                 print("서버 오류입니다")
+             case .networkFail:
+                 print("네트워크 오류입니다")
+             }
+         }
+     }
+ }
