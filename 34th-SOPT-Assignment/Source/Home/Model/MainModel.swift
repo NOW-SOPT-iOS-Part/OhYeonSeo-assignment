@@ -11,9 +11,7 @@ struct MainModel {
     let itemImg: UIImage
     let title: String
     let description: String
-}
-
-extension MainModel {
+    
     static func dummy() -> [MainModel] {
         return [
             MainModel(itemImg: .movie1, title: "베트맨 비긴즈", description: "재밌다"),

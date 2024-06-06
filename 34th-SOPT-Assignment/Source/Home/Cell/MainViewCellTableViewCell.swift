@@ -11,7 +11,7 @@ import Then
 
 class MainViewCell: UICollectionViewCell {
     
-    static let identifier = "main"
+    static let identifier = "MainViewCell"
     var itemRow: Int?
 
     
@@ -63,12 +63,6 @@ class MainViewCell: UICollectionViewCell {
             $0.top.equalTo(movieName.snp.bottom).offset(5)
             $0.leading.equalTo(movieName)
         }
-    }
-    
-    func bindData(image: UIImage, name: String, description: String) {
-        self.moviePoster.image = image
-        self.movieName.text = name
-        self.movieDescription.text = description
     }
 }
 

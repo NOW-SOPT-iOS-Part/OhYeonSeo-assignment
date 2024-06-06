@@ -18,19 +18,11 @@ final class SearchViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initBackground()
-        initViews()
-        initConstraints()
     }
     
     // MARK: - init functions
     
     private func initBackground() {
         self.view.backgroundColor = .systemPink
-    }
-    
-    private func initViews() {
-    }
-    
-    private func initConstraints() {
     }
 }

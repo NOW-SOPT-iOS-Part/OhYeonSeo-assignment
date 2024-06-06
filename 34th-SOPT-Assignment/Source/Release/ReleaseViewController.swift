@@ -18,19 +18,11 @@ final class ReleaseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         initBackground()
-        initViews()
-        initConstraints()
     }
     
     // MARK: - init functions
     
     private func initBackground() {
         self.view.backgroundColor = .green
-    }
-    
-    private func initViews() {
-    }
-    
-    private func initConstraints() {
     }
 }

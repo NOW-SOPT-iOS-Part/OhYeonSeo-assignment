@@ -42,10 +42,8 @@ final class HomeViewController: UIViewController {
     private let upperTabBar = HomeUpperTapBar()    //페이지 선택 탭 (홈, 실시간, TV프로그램, 영화, 파라마운트+)
     
     private let mainContentCollectionView = UICollectionView.setCollectionView()
-    
     private let header1 = SubHeaderView().bindData(text: "티빙에서 꼭 봐야하는 콘텐츠")
     private let mustSeenCollectionView = UICollectionView.setCollectionView()
-    
     private let header2 = SubHeaderView().bindData(text: "인기 LIVE 채널")
     private let popularLiveCollectionView = UICollectionView.setCollectionView()
     private let advBannerCollectionView = UICollectionView.setCollectionView()
@@ -193,7 +191,7 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
         else if collectionView == mustSeenCollectionView {
             guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "sub1", for: indexPath) as? SubViewCell1
             else { return UICollectionViewCell() }
-            cell.bind(movieImage: .movie1, movieName: String(movieData[indexPath.row].movieNm.prefix(9)), audiAcc: movieData[indexPath.row].audiAcc)
+            cell.dataBind(movieImage: .movie1, movieName: String(movieData[indexPath.row].movieNm.prefix(9)), audiAcc: movieData[indexPath.row].audiAcc)
             return cell
         }
         else if collectionView == popularLiveCollectionView {
@@ -212,6 +210,8 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
             fatalError("Unexpected section \(indexPath.section)")
             
         }
+        
+        
     }
 }
 
@@ -242,7 +242,7 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
 
 extension HomeViewController {
      private func fetchData() {
-         MovieService.shared.fetchMovieChart(date: "20240505") { [weak self] response in
+         MovieService.shared.fetchMovieChart(date: "20240509") { [weak self] response in
              switch response {
              case.success(let data):
                  guard let data = data as? MovieResponseModel else { return }
@@ -250,6 +250,7 @@ extension HomeViewController {
                  self?.mustSeenCollectionView.reloadData()
              case .requestErr:
                  print("요청 오류 입니다")
+                 fatalError()
              case .decodedErr:
                  print("디코딩 오류 입니다")
              case .pathErr:
