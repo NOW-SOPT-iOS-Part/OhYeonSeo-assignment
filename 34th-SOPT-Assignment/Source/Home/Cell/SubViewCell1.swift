@@ -11,7 +11,7 @@ import Then
 
 class SubViewCell1: UICollectionViewCell {
     
-    static let identifier = "sub1"
+    static let identifier = "SubViewCell1"
     var itemRow: Int?
 
     
@@ -67,7 +67,7 @@ class SubViewCell1: UICollectionViewCell {
 }
 
 extension SubViewCell1 {
-    func bind(movieImage: UIImage, movieName: String, audiAcc: String) {
+    func dataBind(movieImage: UIImage, movieName: String, audiAcc: String) {
         self.moviePoster.image = movieImage
         self.movieName.text = movieName
         self.audiAcc.text = "관객 " + audiAcc + "명"

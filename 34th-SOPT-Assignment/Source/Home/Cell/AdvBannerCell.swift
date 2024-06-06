@@ -11,7 +11,7 @@ import Then
 
 class AdvBannerCell: UICollectionViewCell {
     
-    static let identifier = "adv"
+    static let identifier = "AdvBannerCell"
     var itemRow: Int?
 
     

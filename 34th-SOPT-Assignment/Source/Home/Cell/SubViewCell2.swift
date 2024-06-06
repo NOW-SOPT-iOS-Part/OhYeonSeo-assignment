@@ -11,7 +11,7 @@ import Then
 
 class SubViewCell2: UICollectionViewCell {
     
-    static let identifier = "sub2"
+    static let identifier = "SubViewCell2"
     var itemRow: Int?
 
     
@@ -86,14 +86,6 @@ class SubViewCell2: UICollectionViewCell {
             $0.top.equalTo(channelEpisode.snp.bottom).offset(2)
             $0.leading.equalTo(channelNumber.snp.trailing).offset(2)
         }
-    }
-    
-    func bindData(image: UIImage, number: String, title: String, episode: String, percent: String) {
-        self.thumbnailView.image = image
-        self.channelNumber.text = number
-        self.channelTitle.text = title
-        self.channelEpisode.text = episode
-        self.channelPercent.text = percent
     }
 }
 
