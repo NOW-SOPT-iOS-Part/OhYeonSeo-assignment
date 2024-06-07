@@ -14,10 +14,10 @@ protocol SendNicknameData: AnyObject{
 }
 
 class CreateNicknameViewController: UIViewController {
-    
-    let nickRegEx = "[가-힣]{1,10}"
-    
+        
     // MARK: - Property
+    
+    private let viewModel = LoginViewModel()
 
     private let nicknameLable = UILabel().then {
         $0.text = "닉네임을 입력해주세요"
@@ -81,8 +81,7 @@ class CreateNicknameViewController: UIViewController {
     }
     
     @objc func textFieldTapped(_ textField: UITextField) {
-        let nickname = nicknameTextField.text ?? ""
-        let isTextFieldsNotEmpty = !nickname.isEmpty && checkNickname(str: nickname)
+        let isTextFieldsNotEmpty = viewModel.checkNicknameValid(nickname: nicknameTextField.text)
         
         //저장버튼 색깔 변경
         saveButton.isEnabled = isTextFieldsNotEmpty
@@ -100,9 +99,5 @@ class CreateNicknameViewController: UIViewController {
         guard let nicknameText = nicknameTextField.text else { return }
         delegate?.sendNicknameData(nickname: nicknameText)
         dismiss(animated: true)
-    }
-    
-    func checkNickname(str: String) -> Bool {
-        return NSPredicate(format: "SELF MATCHES %@", nickRegEx).evaluate(with: str)
     }
 }
