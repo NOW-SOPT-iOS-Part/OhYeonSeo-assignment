@@ -6,36 +6,18 @@
 //
 
 import UIKit
+
 import SnapKit
 import Then
+import RxSwift
 
 final class HomeViewController: UIViewController {
     
-    //MARK: - Data
-    
-    private var mainData = MainModel.dummy() {
-        didSet {
-            rootView.mainContentCollectionView.reloadData()
-        }
-    }
-    
-    private var movieData: [DailyBoxOfficeList] = []
-    
-    private var liveData = LiveModel.dummy() {
-        didSet {
-            rootView.popularLiveCollectionView.reloadData()
-        }
-    }
-    
-    private var advData = AdvModel.dummy() {
-        didSet {
-            rootView.advBannerCollectionView.reloadData()
-        }
-    }
-        
     // MARK: - View
     
     private let rootView = HomeRootView()
+    private let viewModel = HomeViewModel()
+    private let disposeBag = DisposeBag()
     
     //MARK: - Lifecycles
     override func viewDidLoad() {
@@ -47,11 +29,11 @@ final class HomeViewController: UIViewController {
         setDelegate()
         setRegister()
         setCollectionView()
-        fetchData()
+        bindViewModel()
     }
     
     // MARK: - init functions
-
+    
     private func initViews() {
         self.view.addSubview(rootView)
     }
@@ -90,6 +72,32 @@ final class HomeViewController: UIViewController {
     private func setCollectionView() {
         rootView.mainContentCollectionView.isPagingEnabled = true
     }
+    
+    private func bindViewModel() {
+        viewModel.mainData
+            .subscribe(onNext: { [weak self] data in
+                self?.rootView.mainContentCollectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.movieData
+            .subscribe(onNext: { [weak self] data in
+                self?.rootView.mustSeenCollectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.liveData
+            .subscribe(onNext: { [weak self] data in
+                self?.rootView.popularLiveCollectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
+        
+        viewModel.advData
+            .subscribe(onNext: { [weak self] data in
+                self?.rootView.advBannerCollectionView.reloadData()
+            })
+            .disposed(by: disposeBag)
+    }
 }
 
 extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSource {
@@ -97,37 +105,47 @@ extension HomeViewController: UICollectionViewDelegate, UICollectionViewDataSour
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         switch collectionView {
         case rootView.mainContentCollectionView:
-            return 4
+            return (try? viewModel.mainData.value().count) ?? 0
         case rootView.mustSeenCollectionView:
-            return movieData.count
+            return (try? viewModel.movieData.value().count) ?? 0
         case rootView.popularLiveCollectionView:
-            return liveData.count
+            return (try? viewModel.liveData.value().count) ?? 0
         default:
-            return advData.count
+            return (try? viewModel.advData.value().count) ?? 0
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         switch collectionView {
         case rootView.mainContentCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainViewCell.identifier, for: indexPath) as? MainViewCell
-            else { return UICollectionViewCell() }
-            cell.dataBind(mainData[indexPath.item], itemRow: indexPath.item)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: MainViewCell.identifier, for: indexPath) as? MainViewCell,
+                  let data = try? viewModel.mainData.value()[indexPath.item] else {
+                return UICollectionViewCell()
+            }
+            cell.dataBind(data, itemRow: indexPath.item)
             return cell
         case rootView.mustSeenCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SubViewCell1.identifier, for: indexPath) as? SubViewCell1
-            else { return UICollectionViewCell() }
-            cell.dataBind(movieImage: .movie1, movieName: String(movieData[indexPath.row].movieNm.prefix(9)), audiAcc: movieData[indexPath.row].audiAcc)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SubViewCell1.identifier, for: indexPath) as? SubViewCell1,
+                  let data = try? viewModel.movieData.value()[indexPath.item] else {
+                return UICollectionViewCell()
+            }
+            cell.dataBind(movieImage: .movie1,
+                          movieName: String(data.movieNm.prefix(9)),
+                          audiAcc: data.audiAcc)
             return cell
         case rootView.popularLiveCollectionView:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SubViewCell2.identifier, for: indexPath) as? SubViewCell2
-            else { return UICollectionViewCell() }
-            cell.dataBind(liveData[indexPath.item], itemRow: indexPath.item)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: SubViewCell2.identifier, for: indexPath) as? SubViewCell2,
+                  let data = try? viewModel.liveData.value()[indexPath.item] else {
+                return UICollectionViewCell()
+            }
+            cell.dataBind(data, itemRow: indexPath.item)
             return cell
         default:
-            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdvBannerCell.identifier, for: indexPath) as? AdvBannerCell
-            else { return UICollectionViewCell() }
-            cell.dataBind(advData[indexPath.item], itemRow: indexPath.item)
+            guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: AdvBannerCell.identifier, for: indexPath) as? AdvBannerCell,
+                  let data = try? viewModel.advData.value()[indexPath.item] else {
+                return UICollectionViewCell()
+            }
+            cell.dataBind(data, itemRow: indexPath.item)
             return cell
         }
     }
@@ -159,27 +177,3 @@ extension HomeViewController: UICollectionViewDelegateFlowLayout {
         }
     }
 }
-
-extension HomeViewController {
-     private func fetchData() {
-         MovieService.shared.fetchMovieChart(date: "20240509") { [weak self] response in
-             switch response {
-             case.success(let data):
-                 guard let data = data as? MovieResponseModel else { return }
-                 self?.movieData.append(contentsOf: data.boxOfficeResult.dailyBoxOfficeList)
-                 self?.rootView.mustSeenCollectionView.reloadData()
-             case .requestErr:
-                 print("요청 오류 입니다")
-                 fatalError()
-             case .decodedErr:
-                 print("디코딩 오류 입니다")
-             case .pathErr:
-                 print("경로 오류 입니다")
-             case .serverErr:
-                 print("서버 오류입니다")
-             case .networkFail:
-                 print("네트워크 오류입니다")
-             }
-         }
-     }
- }
