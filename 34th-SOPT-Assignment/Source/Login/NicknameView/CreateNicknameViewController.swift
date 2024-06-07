@@ -17,29 +17,9 @@ class CreateNicknameViewController: UIViewController {
         
     // MARK: - Property
     
+    private let rootView = NicknameView()
+    
     private let viewModel = LoginViewModel()
-
-    private let nicknameLable = UILabel().then {
-        $0.text = "닉네임을 입력해주세요"
-        $0.font = .pretendardFont(weight: 500, size: 23)
-    }
-    
-    private lazy var nicknameTextField = UITextField().then {
-        $0.setTextField(textColor: .black, backgroundColor:.gray2)
-        $0.setPlaceholder(placeholder: "닉네임", fontColor: UIColor.black, font: .pretendardFont(weight: 600, size: 15))
-        $0.addTarget(self, action: #selector(textFieldTapped), for: .allEvents)
-        $0.layer.borderColor = UIColor(named: "gray2")?.cgColor
-    }
-    
-    private lazy var saveButton = UIButton().then {
-        $0.backgroundColor = .white
-        $0.setTitle("저장하기", for: .normal)
-        $0.setTitleColor(.gray2, for: .normal)
-        $0.titleLabel?.font = .pretendardFont(weight: 600, size: 14)
-        $0.setButtonLayer(borderColor: .gray2)
-        $0.addTarget(self, action: #selector(backToLoginVC), for: .touchUpInside)
-        $0.isEnabled = false
-    }
     
     weak var delegate: SendNicknameData?
     
@@ -49,6 +29,7 @@ class CreateNicknameViewController: UIViewController {
         initBackground()
         initViews()
         initConstraints()
+        setAddTarget()
     }
     
     // MARK: - View
@@ -58,45 +39,38 @@ class CreateNicknameViewController: UIViewController {
     }
     
     private func initViews() {
-        self.view.addSubviews(nicknameLable, nicknameTextField, saveButton)
+        self.view.addSubview(rootView)
     }
     
     private func initConstraints() {
-        nicknameLable.snp.makeConstraints { make in
-            make.top.equalToSuperview().inset(45)
-            make.leading.equalToSuperview().inset(20)
-        }
-        
-        nicknameTextField.snp.makeConstraints { make in
-            make.top.equalTo(nicknameLable.snp.bottom).offset(20)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(55)
-        }
-        
-        saveButton.snp.makeConstraints { make in
-            make.bottom.equalToSuperview().inset(30)
-            make.leading.trailing.equalToSuperview().inset(20)
-            make.height.equalTo(55)
+        rootView.snp.makeConstraints {
+            $0.edges.equalToSuperview()
         }
     }
     
+    private func setAddTarget() {
+        rootView.nicknameTextField.addTarget(self, action: #selector(textFieldTapped), for: .allEvents)
+        rootView.saveButton.addTarget(self, action: #selector(backToLoginVC), for: .touchUpInside)
+    }
+    
     @objc func textFieldTapped(_ textField: UITextField) {
-        let isTextFieldsNotEmpty = viewModel.checkNicknameValid(nickname: nicknameTextField.text)
+        let textField = rootView.nicknameTextField.text
+        let isTextFieldsNotEmpty = viewModel.checkNicknameValid(nickname: textField)
         
         //저장버튼 색깔 변경
-        saveButton.isEnabled = isTextFieldsNotEmpty
-        saveButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .white
-        saveButton.setButtonLayer(borderColor: isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .gray2)
+        rootView.saveButton.isEnabled = isTextFieldsNotEmpty
+        rootView.saveButton.backgroundColor = isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .white
+        rootView.saveButton.setButtonLayer(borderColor: isTextFieldsNotEmpty ? UIColor(named: "BrandColor") : .gray2)
 
         if isTextFieldsNotEmpty {
-            saveButton.setTitleColor(.white, for: .normal)
+            rootView.saveButton.setTitleColor(.white, for: .normal)
         } else {
-            saveButton.setTitleColor(.gray2, for: .normal)
+            rootView.saveButton.setTitleColor(.gray2, for: .normal)
         }
     }
     
     @objc private func backToLoginVC() {
-        guard let nicknameText = nicknameTextField.text else { return }
+        guard let nicknameText = rootView.nicknameTextField.text else { return }
         delegate?.sendNicknameData(nickname: nicknameText)
         dismiss(animated: true)
     }
