@@ -82,10 +82,14 @@ final class WelcomeViewController: UIViewController {
     
     @objc
     func mainButtontapped() {
-        let viewController = HomeViewController()
-        self.navigationController?.pushViewController(viewController, animated: true)
+        if let windowScene = view.window?.windowScene {
+            for window in windowScene.windows {
+                window.rootViewController = UINavigationController(rootViewController: TabBarViewController())
+            }
+        }
     }
 }
+
 
 //#Preview {
 //    WelcomeViewController()
