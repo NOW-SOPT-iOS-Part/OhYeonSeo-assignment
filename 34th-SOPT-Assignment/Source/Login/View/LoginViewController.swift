@@ -15,35 +15,29 @@ class LoginViewController: UIViewController {
     
     var passwardRevealed = true
     var nickname: String? = ""
-    let emailRegEx = "[A-Z0-9a-z._%+-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}"
-    
     
     // MARK: - UIView
     
     private let loginView = LoginView()
+    private let viewModel = LoginViewModel()
     
     //MARK: - Lifecycles
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        initBackground()
-        initViews()
-        initConstraints()
+        setupHierarchy()
+        setupLayout()
         setDelegate()
         setAddTarget()
     }
     
     // MARK: - UI
     
-    private func initBackground() {
-        view.backgroundColor = .black
-    }
-    
-    private func initViews() {
+    private func setupHierarchy() {
         self.view.addSubview(loginView)
     }
     
-    private func initConstraints() {
+    private func setupLayout() {
         loginView.snp.makeConstraints{
             $0.edges.equalToSuperview()
         }
@@ -72,10 +66,6 @@ class LoginViewController: UIViewController {
         VC.modalPresentationStyle = .formSheet
         VC.delegate = self
         self.present(VC, animated: true)
-    }
-    
-    func checkEmail(str: String) -> Bool {
-        return  NSPredicate(format: "SELF MATCHES %@", emailRegEx).evaluate(with: str)
     }
 }
 
@@ -133,9 +123,9 @@ extension LoginViewController: UITextFieldDelegate {
     }
     
     @objc func textFieldTapped(_ textField: UITextField) {
-        let id = loginView.idTextField.text ?? ""
-        let password = loginView.passwordTextField.text ?? ""
-        let isTextFieldsNotEmpty = !id.isEmpty && !password.isEmpty && checkEmail(str: id)
+        let id = loginView.idTextField.text
+        let password = loginView.passwordTextField.text
+        let isTextFieldsNotEmpty = viewModel.checkValid(id: id, password: password)
         
         //로그인버튼 색깔 변경
         loginView.loginButton.isEnabled = isTextFieldsNotEmpty
@@ -148,13 +138,13 @@ extension LoginViewController: UITextFieldDelegate {
         
         //delete button
         if textField.tag == 100 {
-            loginView.idDeleteButton.isHidden = id.isEmpty
+            loginView.idDeleteButton.isHidden = id!.isEmpty
             loginView.passwordRevealedButton.isHidden = true
             loginView.passwordDeleteButton.isHidden = true
         }
         if textField.tag == 200 {
             loginView.idDeleteButton.isHidden = true
-            loginView.passwordDeleteButton.isHidden = password.isEmpty
+            loginView.passwordDeleteButton.isHidden = password!.isEmpty
             loginView.passwordRevealedButton.isHidden = false
         }
     }
